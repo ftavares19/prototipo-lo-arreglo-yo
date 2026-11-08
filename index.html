@@ -1,0 +1,425 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>¿Lo arreglo yo? Prototipo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --hormigon:#e7ebee; --chapa:#f7f9fa; --tinta:#101a24; --tinta-2:#46535f; --tinta-3:#6f7c88; --linea:#c4ccd3; --hueco:#2a3744;
+  --verde:#1f9254; --ambar:#f0b400; --rojo:#d6372b;
+  --display:"Bricolage Grotesque","Arial Narrow",Arial,sans-serif;
+  --texto:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:#c9d0d6;font-family:var(--texto);color:var(--tinta);-webkit-font-smoothing:antialiased}
+#phone{max-width:430px;margin:0 auto;min-height:100vh;background:var(--hormigon);display:flex;flex-direction:column}
+.top{display:flex;align-items:baseline;justify-content:space-between;padding:20px 22px 4px}
+.brand{font-family:var(--display);font-weight:800;font-size:19px;letter-spacing:-.02em}
+.version{font-size:13px;color:var(--tinta-3)}
+main{flex:1;padding:14px 22px 120px}
+svg.i{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+h1{font-family:var(--display);font-weight:800;font-size:38px;line-height:1.02;letter-spacing:-.03em;margin:18px 0 12px}
+h2{font-family:var(--display);font-weight:800;font-size:28px;line-height:1.08;letter-spacing:-.025em;margin:0}
+h3{font-family:var(--display);font-weight:600;font-size:20px;line-height:1.2;letter-spacing:-.01em;margin:0}
+.sec{font-family:var(--display);font-weight:800;font-size:19px;letter-spacing:-.01em;margin:34px 0 10px}
+p{font-size:17px;line-height:1.5;margin:8px 0;color:var(--tinta-2);max-width:60ch}
+.lead{font-size:19px;line-height:1.45;color:var(--tinta)}
+.small{font-size:14px;color:var(--tinta-3)}
+.btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:56px;border:0;border-radius:10px;background:var(--tinta);color:#fff;font:700 17px var(--texto);cursor:pointer;margin:14px 0;padding:0 18px}
+.btn:active{transform:translateY(1px)}
+.btn.sec2{background:transparent;color:var(--tinta);border:2px solid var(--tinta)}
+.btn[disabled]{background:#cdd4da;color:var(--tinta-3);cursor:not-allowed}
+:focus-visible{outline:3px solid var(--tinta);outline-offset:3px}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);border:2px solid var(--tinta);border-radius:10px;overflow:hidden}
+.seg button{border:0;background:transparent;padding:13px 6px;font:700 14px/1.2 var(--texto);color:var(--tinta);cursor:pointer;border-right:2px solid var(--tinta)}
+.seg button:last-child{border-right:0}
+.seg button.on{background:var(--tinta);color:#fff}
+.back{display:inline-flex;align-items:center;gap:4px;background:none;border:0;padding:6px 0;font:700 16px var(--texto);color:var(--tinta);cursor:pointer}
+.row{display:flex;align-items:center;gap:12px}
+.lista{border-top:2px solid var(--tinta)}
+.item{display:flex;align-items:center;gap:14px;padding:16px 2px;border:0;border-bottom:1px solid var(--linea);cursor:pointer;background:none;width:100%;text-align:left;font:inherit;color:inherit}
+.item .ico{width:46px;height:46px;border-radius:8px;border:2px solid var(--tinta);display:flex;align-items:center;justify-content:center;flex:none;background:var(--chapa)}
+.item.on{background:var(--tinta);color:#fff;padding-left:14px;padding-right:14px;border-radius:10px;border-bottom-color:transparent}
+.item.on .ico{background:var(--tinta);border-color:#fff}
+.item.on .small{color:#b9c3cc}
+.item b{font-size:17px;display:block;line-height:1.25}
+.item .grow{flex:1}
+.lamp-mini{display:flex;gap:3px;flex:none}
+.lamp-mini i{width:9px;height:9px;border-radius:50%;background:var(--linea)}
+.lamp-mini i.on.v{background:var(--verde)} .lamp-mini i.on.a{background:var(--ambar)} .lamp-mini i.on.r{background:var(--rojo)}
+textarea{width:100%;min-height:88px;border:2px solid var(--tinta);border-radius:10px;background:var(--chapa);padding:14px;font:17px var(--texto);color:var(--tinta);resize:vertical}
+textarea::placeholder{color:var(--tinta-3)}
+.upload{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:6px;min-height:150px;border:2px dashed var(--tinta-2);border-radius:10px;color:var(--tinta-2);cursor:pointer;padding:20px;background:var(--chapa)}
+.upload b{font-size:19px;color:var(--tinta);font-family:var(--display)}
+.upload img{max-width:100%;max-height:220px;border-radius:8px}
+/* Veredicto: el semáforo es el elemento memorable */
+.veredicto{display:flex;gap:20px;align-items:flex-start;margin:14px 0 4px}
+.lamp{display:flex;flex-direction:column;gap:11px;background:var(--tinta);border-radius:22px;padding:12px;flex:none}
+.lamp i{width:46px;height:46px;border-radius:50%;background:var(--hueco)}
+.lamp i.on.r{background:var(--rojo);box-shadow:0 0 0 5px rgba(214,55,43,.28)}
+.lamp i.on.a{background:var(--ambar);box-shadow:0 0 0 5px rgba(240,180,0,.30)}
+.lamp i.on.v{background:var(--verde);box-shadow:0 0 0 5px rgba(31,146,84,.28)}
+.lamp i.on{animation:encender .7s ease-out both}
+@keyframes encender{from{opacity:.15}to{opacity:1}}
+.veredicto .txt{padding-top:2px}
+.estado{display:flex;align-items:center;gap:8px;font-weight:700;font-size:16px;margin:0 0 6px;color:var(--tinta)}
+.estado .dot{width:12px;height:12px;border-radius:50%}
+.estado .dot.verde{background:var(--verde)} .estado .dot.amarillo{background:var(--ambar)} .estado .dot.rojo{background:var(--rojo)}
+.veredicto p{margin:10px 0 0;font-size:17px;color:var(--tinta-2)}
+.alerta{display:flex;gap:12px;align-items:flex-start;border:2px solid var(--tinta);border-radius:10px;padding:14px;margin:22px 0 6px;background:var(--chapa)}
+.alerta p{margin:0;font-size:15px;color:var(--tinta)}
+.causa{padding:14px 0;border-bottom:1px solid var(--linea)}
+.causa .t{display:flex;justify-content:space-between;gap:14px;font-size:17px;line-height:1.3}
+.causa .t span:last-child{font-size:15px;font-weight:700;color:var(--tinta-2);white-space:nowrap}
+.causa .b{height:6px;border-radius:3px;background:#d3dae0;margin-top:10px;overflow:hidden}
+.causa .b i{display:block;height:100%;background:var(--tinta)}
+dl.datos{margin:0;border-top:2px solid var(--tinta)}
+dl.datos div{display:flex;justify-content:space-between;gap:18px;padding:14px 0;border-bottom:1px solid var(--linea);font-size:17px}
+dl.datos dt{color:var(--tinta-2)}
+dl.datos dd{margin:0;font-weight:700;text-align:right}
+/* Pasos: aquí sí hay una secuencia */
+.pasos{margin-top:12px}
+.paso{position:relative;padding:0 0 30px 58px}
+.paso:before{content:"";position:absolute;left:21px;top:46px;bottom:4px;width:2px;background:var(--linea)}
+.paso:last-child:before{display:none}
+.paso .n{position:absolute;left:0;top:0;width:44px;height:44px;border-radius:8px;background:var(--tinta);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:22px}
+.paso.hecho .n{background:var(--verde)}
+.paso .min{font-size:14px;color:var(--tinta-3);margin-bottom:2px}
+.paso h3{margin:0 0 12px}
+.foto{height:120px;border-radius:8px;display:flex;align-items:center;justify-content:center;gap:10px;color:var(--tinta-2);font-size:14px;text-align:center;padding:10px;background:repeating-linear-gradient(135deg,#dde3e8,#dde3e8 9px,#d0d8df 9px,#d0d8df 18px)}
+.consejo{border-left:4px solid var(--tinta);padding:4px 0 4px 14px;margin:14px 0;font-size:16px;color:var(--tinta)}
+.consejo b{display:block}
+details{border-top:1px solid var(--linea);padding:13px 0}
+details:last-of-type{border-bottom:1px solid var(--linea)}
+details summary{cursor:pointer;font-weight:700;font-size:16px;list-style:none;display:flex;justify-content:space-between;align-items:center}
+details summary::-webkit-details-marker{display:none}
+details summary:after{content:"+";font-size:22px;font-weight:400;color:var(--tinta-2)}
+details[open] summary:after{content:"–"}
+details p{margin:8px 0 0;font-size:16px}
+.check{display:flex;align-items:center;gap:12px;margin-top:16px;font-weight:700;font-size:16px;cursor:pointer}
+.check input{appearance:none;width:28px;height:28px;border:2px solid var(--tinta);border-radius:6px;background:var(--chapa);cursor:pointer;display:grid;place-content:center}
+.check input:checked{background:var(--verde);border-color:var(--verde)}
+.check input:checked:after{content:"";width:13px;height:7px;border-left:3px solid #fff;border-bottom:3px solid #fff;transform:rotate(-45deg) translate(1px,-1px)}
+.espera{display:flex;gap:16px;align-items:center;margin-top:60px}
+.espera .lamp i{animation:parpadeo 1.2s steps(1) infinite}
+.espera .lamp i:nth-child(2){animation-delay:.4s}
+.espera .lamp i:nth-child(3){animation-delay:.8s}
+@keyframes parpadeo{0%,33%{background:var(--ambar)}34%,100%{background:var(--hueco)}}
+pre.resumen{white-space:pre-wrap;background:var(--chapa);border:2px solid var(--tinta);border-radius:10px;padding:16px;font:14px/1.6 ui-monospace,Consolas,monospace;color:var(--tinta);margin:0}
+nav.bottom{position:sticky;bottom:0;background:var(--chapa);border-top:2px solid var(--tinta);display:grid;grid-template-columns:repeat(3,1fr);padding:0 6px calc(4px + env(safe-area-inset-bottom))}
+nav.bottom button{display:flex;flex-direction:column;align-items:center;gap:4px;border:0;border-top:5px solid transparent;margin-top:-2px;background:none;padding:10px 4px 6px;font:700 13px var(--texto);color:var(--tinta-3);cursor:pointer}
+nav.bottom button.on{color:var(--tinta);border-top-color:var(--tinta)}
+.nota{font-size:14px;color:var(--tinta-3);margin:28px 0 0}
+@media (prefers-reduced-motion:reduce){.lamp i.on,.espera .lamp i{animation:none}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="home" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></symbol>
+  <symbol id="camera" viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></symbol>
+  <symbol id="hist" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></symbol>
+  <symbol id="bulb" viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></symbol>
+  <symbol id="flame" viewBox="0 0 24 24"><path d="M12 3c1 3.5 5 5.5 5 10a5 5 0 0 1-10 0c0-2 1-3.2 2-4.2.3 1.2 1 1.9 1.7 2.2C10.5 8 11 5.5 12 3z"/></symbol>
+  <symbol id="drop" viewBox="0 0 24 24"><path d="M12 3s6 6.2 6 10.5A6 6 0 0 1 6 13.5C6 9.2 12 3 12 3z"/></symbol>
+  <symbol id="back" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></symbol>
+  <symbol id="next" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></symbol>
+  <symbol id="alert" viewBox="0 0 24 24"><path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18v.01"/></symbol>
+  <symbol id="copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></symbol>
+  <symbol id="image" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M21 16l-5-5-8 8"/></symbol>
+</svg>
+
+<div id="phone">
+  <div class="top"><div class="brand">¿Lo arreglo yo?</div><span class="version">Versión de prueba</span></div>
+  <main id="screen"></main>
+  <nav class="bottom" aria-label="Navegación">
+    <button data-go="inicio"><svg class="i"><use href="#home"/></svg>Inicio</button>
+    <button data-go="nuevo"><svg class="i"><use href="#camera"/></svg>Nuevo</button>
+    <button data-go="historial"><svg class="i"><use href="#hist"/></svg>Historial</button>
+  </nav>
+</div>
+
+<script>
+const ic = (n, extra = "") => `<svg class="i" ${extra}><use href="#${n}"/></svg>`;
+const lampMini = s => `<span class="lamp-mini" aria-hidden="true"><i class="r ${s === "rojo" ? "on" : ""}"></i><i class="a ${s === "amarillo" ? "on" : ""}"></i><i class="v ${s === "verde" ? "on" : ""}"></i></span>`;
+const lampGrande = s => `<div class="lamp" aria-hidden="true"><i class="r ${s === "rojo" ? "on" : ""}"></i><i class="a ${s === "amarillo" ? "on" : ""}"></i><i class="v ${s === "verde" ? "on" : ""}"></i></div>`;
+
+/* ---------- Datos de los casos (diagnóstico simulado) ---------- */
+const CASOS = {
+  luz: {
+    icono: "bulb", titulo: "La luz del pasillo no prende", resumen: "Una luz que dejó de funcionar",
+    semaforo: "verde", nombre: "Verde", titSem: "Podés hacerlo vos",
+    razones: "Es un cambio simple, se hace sin tocar cables y la luz se corta desde el tablero.",
+    causas: [["Foco quemado", 85, "Muy probable"], ["Foco flojo en el portalámparas", 45, "Posible"], ["Llave térmica baja", 18, "Poco probable"]],
+    tiempo: "10 minutos", costo: "Unos $200 el foco", materiales: "Un foco nuevo del mismo tipo",
+    pasos: [
+      { t: "Cortá la luz desde el tablero", min: 2, foto: "Llave térmica del pasillo",
+        mal: "Si no cortás la luz, podés recibir una descarga al tocar el portalámparas.", deshacer: "Volvé a subir la llave y empezá de nuevo desde este paso.",
+        novato: "Si no sabés cuál es la llave, bajá la general. Después la volvés a subir." },
+      { t: "Esperá que el foco se enfríe y sacalo girando", min: 3, foto: "Sacar el foco con un trapo seco",
+        mal: "Si el foco está caliente podés quemarte, y si se rompe el vidrio puede cortar.", deshacer: "Si se rompe, no lo toques con la mano: juntá los vidrios con guantes y cortá la luz de nuevo.",
+        novato: "Giralo hacia la izquierda, sin hacer fuerza." },
+      { t: "Colocá el foco nuevo", min: 2, foto: "Foco nuevo del mismo tipo (rosca o pin)",
+        mal: "Un foco de otro tipo no entra o no prende.", deshacer: "Sacalo y fijate en el foco anterior qué tipo era.",
+        novato: "Llevá el foco viejo a la ferretería para comprar uno igual." },
+      { t: "Subí la llave y probá", min: 2, foto: "Luz encendida",
+        mal: "Si no prende o salta la llave, hay otro problema.", deshacer: "Bajá la llave y no sigas insistiendo: consultá a un electricista.",
+        novato: "Si no prende con el foco nuevo, dejá de intentar y pedí ayuda." }
+    ],
+    ayudaSi: "Si con el foco nuevo no prende, o salta la llave térmica, consultá a un electricista."
+  },
+  calefon: {
+    icono: "flame", titulo: "El calefón no calienta", resumen: "Un equipo que dejó de calentar el agua",
+    semaforo: "amarillo", nombre: "Amarillo", titSem: "Revisá esto antes de comprar o llamar",
+    razones: "Hay pruebas simples que podés hacer vos, pero si la falla es una pieza interna necesitás a un técnico.",
+    causas: [["Falta de energía (llave térmica baja)", 45, "Posible"], ["Resistencia o termostato", 82, "Muy probable"], ["Falla en otra parte de la instalación", 40, "Posible"]],
+    tiempo: "20 minutos", costo: "$0 si es la llave", materiales: "Una linterna",
+    pasos: [
+      { t: "Revisá la llave térmica del calefón en el tablero", min: 3, foto: "Tablero con la llave del calefón",
+        mal: "Si la llave salta de nuevo apenas la subís, hay un problema eléctrico.", deshacer: "Dejala baja y no insistas: llamá a un técnico.",
+        novato: "La llave tiene una etiqueta. Si no la encontrás, preguntale a quien administra el edificio." },
+      { t: "Mirá si el calefón tiene luz indicadora o está caliente por fuera", min: 2, foto: "Luz indicadora del calefón",
+        mal: "Tocar el equipo cuando está encendido y mojado es peligroso.", deshacer: "Si hay humedad alrededor, cortá la llave y no lo toques.",
+        novato: "Solo mirá, no abras ni toques nada del interior." },
+      { t: "Probá si sale agua caliente en otra canilla", min: 5, foto: "Canilla de otro baño",
+        mal: "Dejar la canilla abierta mucho tiempo gasta agua.", deshacer: "Cerrala y anotá lo que viste para el historial.",
+        novato: "Anotá cuál canilla probaste y qué pasó." },
+      { t: "Si todo está bien, no compres un equipo nuevo: pedí revisión", min: 5, foto: "Historial listo para enviar",
+        mal: "Cambiar el calefón sin saber la causa puede no resolver nada.", deshacer: "Si ya lo compraste, guardá la factura y la caja por si hay que devolverlo.",
+        novato: "Mandale el resumen del historial al técnico o a la garantía." }
+    ],
+    ayudaSi: "No abras el calefón por tu cuenta. Si las revisiones no alcanzan, llamá a un técnico o a la garantía y mostrale el historial."
+  },
+  humedad: {
+    icono: "drop", titulo: "Humedad y agua que gotea del techo", resumen: "Manchas y goteo en el techo",
+    semaforo: "rojo", nombre: "Rojo", titSem: "No lo arregles vos: llamá a un profesional",
+    razones: "El agua puede venir de otro apartamento o de la estructura, y si cae cerca de luces o enchufes hay riesgo eléctrico.",
+    causas: [["Filtración de la azotea o de una cañería de arriba", 85, "Muy probable"], ["Condensación por falta de ventilación", 42, "Posible"], ["Agua en contacto con la instalación eléctrica", 38, "Posible"]],
+    tiempo: "10 minutos por ahora", costo: "Lo define el profesional", materiales: "Balde, trapo y celular para sacar fotos",
+    pasos: [
+      { t: "Si hay luces o enchufes mojados cerca, bajá la llave de esa zona", min: 2, foto: "Tablero con la llave de la zona",
+        mal: "Tocar algo eléctrico mojado puede dar una descarga.", deshacer: "Volvé a subir la llave solo cuando todo esté seco y lo haya revisado un electricista.",
+        novato: "Si tenés dudas, bajá la llave general." },
+      { t: "Poné un balde y secá el piso", min: 3, foto: "Balde debajo del goteo",
+        mal: "El piso mojado es resbaladizo.", deshacer: "Si se llenó el balde, vaciarlo y ponelo de nuevo.",
+        novato: "Poné un trapo alrededor del balde para que no salpique." },
+      { t: "Sacá fotos con fecha", min: 2, foto: "Mancha en el techo",
+        mal: "Sin fotos es difícil explicar cuánto empeoró.", deshacer: "Si no tenés fotos de antes, sacalas ahora y anotá desde cuándo ocurre.",
+        novato: "Sacá una foto general y una de cerca." },
+      { t: "Avisá a la inmobiliaria o a quien administra el edificio", min: 3, foto: "Resumen para enviar",
+        mal: "Si no avisás por escrito, después cuesta probar cuándo empezó.", deshacer: "Si ya llamaste, mandá igual el resumen por mensaje.",
+        novato: "Usá el resumen del historial: ya tiene lo que necesitan saber." }
+    ],
+    ayudaSi: "Este caso necesita a un profesional. Avisá a la inmobiliaria o a quien administra el edificio, y no intentes arreglar la humedad vos."
+  }
+};
+
+const EXP = [["nada", "Nunca arreglé nada"], ["algo", "Algunas cosas"], ["bastante", "Bastante"]];
+
+/* ---------- Estado ---------- */
+const S = {
+  vista: "inicio", exp: "nada", foto: null, texto: "", caso: null, hecho: {}, sel: null,
+  historial: [
+    { id: 1, caso: "calefon", fecha: "hace 3 días", estado: "sin resolver", pasos: [true, true, false, false], nota: "La luz indicadora no prende." }
+  ]
+};
+
+const $ = s => document.querySelector(s);
+const screen = $("#screen");
+function go(v, extra) { S.vista = v; Object.assign(S, extra || {}); render(); window.scrollTo(0, 0); }
+
+/* ---------- Vistas ---------- */
+function filaHist(h) {
+  const c = CASOS[h.caso];
+  return `<button class="item" data-act="verHist" data-id="${h.id}">
+    <span class="ico">${ic(c.icono)}</span>
+    <span class="grow"><b>${c.titulo}</b><span class="small">${h.fecha}, ${h.estado}</span></span>
+    ${lampMini(c.semaforo)}${ic("next")}
+  </button>`;
+}
+
+function vInicio() {
+  const ult = S.historial.slice(-2).reverse().map(filaHist).join("");
+  return `
+    <h1>Algo se rompió en casa.</h1>
+    <p class="lead">Sacale una foto y te decimos si podés arreglarlo vos o si conviene llamar a alguien.</p>
+    <button class="btn" data-go="nuevo">${ic("camera")} Fotografiar el problema</button>
+    <h2 class="sec">¿Cuánto sabés de arreglos?</h2>
+    <div class="seg">${EXP.map(([k, t]) => `<button class="${S.exp === k ? "on" : ""}" data-act="exp" data-k="${k}">${t}</button>`).join("")}</div>
+    <p class="small">Ajustamos los consejos a tu nivel.</p>
+    <h2 class="sec">Últimos problemas</h2>
+    <div class="lista">${ult || '<p class="small">Todavía no tenés problemas guardados.</p>'}</div>
+    <p class="nota">Esto es una versión de prueba. El diagnóstico es simulado y no reemplaza a un profesional.</p>`;
+}
+
+function vNuevo() {
+  const casos = Object.entries(CASOS).map(([k, c]) => `
+    <button class="item ${S.caso === k ? "on" : ""}" data-act="caso" data-k="${k}">
+      <span class="ico">${ic(c.icono)}</span>
+      <span class="grow"><b>${c.titulo}</b><span class="small">${c.resumen}</span></span>
+    </button>`).join("");
+  return `
+    <button class="back" data-go="inicio">${ic("back")} Volver</button>
+    <h1>Contanos qué pasa</h1>
+    <label class="upload">
+      ${S.foto ? `<img src="${S.foto}" alt="Foto del problema">` : `${ic("camera", 'style="width:34px;height:34px"')}<b>Sacá o subí una foto</b><span class="small">También podés grabar un video corto</span>`}
+      <input id="file" type="file" accept="image/*,video/*" capture="environment" hidden>
+    </label>
+    <h2 class="sec">Con tus palabras, si querés</h2>
+    <textarea id="texto" placeholder="Por ejemplo: desde ayer no funciona">${S.texto}</textarea>
+    <h2 class="sec">Elegí la situación que más se parece</h2>
+    <p class="small" style="margin-top:-4px">En esta versión de prueba el análisis no lee la foto: usa la situación que elijas.</p>
+    <div class="lista">${casos}</div>
+    <button class="btn" data-act="analizar" ${S.caso ? "" : "disabled"}>Analizar el problema</button>`;
+}
+
+function vAnalizando() {
+  return `<div class="espera"><div class="lamp" aria-hidden="true"><i></i><i></i><i></i></div><div><h2>Estamos mirando la foto</h2><p>La comparamos con casos parecidos.</p></div></div>`;
+}
+
+function vResultado() {
+  const c = CASOS[S.caso];
+  return `
+    <button class="back" data-go="nuevo">${ic("back")} Volver</button>
+    <p class="small" style="margin:6px 0 0">${c.titulo}</p>
+    <div class="veredicto">
+      ${lampGrande(c.semaforo)}
+      <div class="txt">
+        <p class="estado"><span class="dot ${c.semaforo}"></span>${c.nombre}</p>
+        <h2>${c.titSem}</h2>
+        <p>${c.razones}</p>
+      </div>
+    </div>
+    <div class="alerta">${ic("alert")}<p><b>Seguridad.</b> Si sentís olor a gas, ves chispas o hay cables dañados, no lo toques y llamá a un profesional.</p></div>
+    <h2 class="sec">Qué puede estar pasando</h2>
+    <div>${c.causas.map(([t, n, e]) => `<div class="causa"><div class="t"><span>${t}</span><span>${e}</span></div><div class="b"><i style="width:${n}%"></i></div></div>`).join("")}</div>
+    <h2 class="sec">Lo que necesitás</h2>
+    <dl class="datos">
+      <div><dt>Tiempo</dt><dd>${c.tiempo}</dd></div>
+      <div><dt>Costo</dt><dd>${c.costo}</dd></div>
+      <div><dt>Materiales</dt><dd>${c.materiales}</dd></div>
+    </dl>
+    <button class="btn" data-go="guia">${c.semaforo === "rojo" ? "Qué hacer mientras tanto" : "Ver los pasos"} ${ic("next")}</button>
+    <p class="nota">Es una orientación, no un diagnóstico seguro. Ante la duda, consultá a un profesional.</p>`;
+}
+
+function vGuia() {
+  const c = CASOS[S.caso];
+  const pasos = c.pasos.map((p, i) => `
+    <div class="paso ${S.hecho[i] ? "hecho" : ""}">
+      <span class="n">${i + 1}</span>
+      <div class="min">${p.min} minutos</div>
+      <h3>${p.t}</h3>
+      <div class="foto">${ic("image")} ${p.foto}</div>
+      ${S.exp === "nada" ? `<div class="consejo"><b>Para empezar</b>${p.novato}</div>` : ""}
+      <details><summary>Qué puede salir mal</summary><p>${p.mal}</p></details>
+      <details><summary>Cómo deshacerlo</summary><p>${p.deshacer}</p></details>
+      <label class="check"><input type="checkbox" data-act="hecho" data-i="${i}" ${S.hecho[i] ? "checked" : ""}> Hecho</label>
+    </div>`).join("");
+  return `
+    <button class="back" data-go="resultado">${ic("back")} Volver al resultado</button>
+    <p class="small" style="margin:6px 0 0">${c.titulo}</p>
+    <h1 style="margin-top:6px">${c.semaforo === "rojo" ? "Mientras tanto" : "Paso a paso"}</h1>
+    <div class="pasos">${pasos}</div>
+    <div class="alerta">${ic("alert")}<p><b>Cuándo pedir ayuda.</b> ${c.ayudaSi}</p></div>
+    <button class="btn" data-act="terminar">Guardar en el historial</button>`;
+}
+
+function vTerminar() {
+  return `
+    <h1>¿Quedó resuelto?</h1>
+    <p class="lead">Lo guardamos en el historial para que no tengas que acordarte después.</p>
+    <button class="btn" data-act="guardar" data-e="resuelto">Sí, quedó resuelto</button>
+    <button class="btn sec2" data-act="guardar" data-e="necesito ayuda">No, necesito ayuda</button>`;
+}
+
+function vHistorial() {
+  const lista = S.historial.slice().reverse().map(filaHist).join("");
+  return `<h1>Historial</h1><p class="lead">Lo que pasó con cada problema, listo para mostrárselo a un técnico.</p>
+    <div class="lista" style="margin-top:20px">${lista || '<p class="small">Todavía no hay nada guardado.</p>'}</div>`;
+}
+
+function resumenTexto(h) {
+  const c = CASOS[h.caso];
+  const hechos = c.pasos.filter((_, i) => h.pasos[i]).map(p => "- " + p.t);
+  return [
+    "RESUMEN PARA EL TÉCNICO",
+    "Problema: " + c.titulo,
+    "Desde: " + h.fecha,
+    "Experiencia de quien lo reporta: " + (EXP.find(e => e[0] === S.exp) || [0, ""])[1].toLowerCase(),
+    "Causas probables: " + c.causas.map(x => x[0]).join("; "),
+    "Lo que se probó:",
+    hechos.length ? hechos.join("\n") : "- Todavía no se probó nada",
+    h.nota ? "Observación: " + h.nota : "",
+    "Estado: " + h.estado
+  ].filter(Boolean).join("\n");
+}
+
+function vDetalle() {
+  const h = S.historial.find(x => x.id === S.sel);
+  const c = CASOS[h.caso];
+  return `
+    <button class="back" data-go="historial">${ic("back")} Historial</button>
+    <h1 style="margin-top:6px">${c.titulo}</h1>
+    <div class="row">${lampMini(c.semaforo)}<span class="small">${h.fecha}, ${h.estado}</span></div>
+    <h2 class="sec">Resumen para el técnico</h2>
+    <pre class="resumen" id="resumen">${resumenTexto(h)}</pre>
+    <button class="btn" data-act="copiar">${ic("copy")} Copiar resumen</button>
+    <p class="nota" id="msg"></p>`;
+}
+
+const VISTAS = { inicio: vInicio, nuevo: vNuevo, analizando: vAnalizando, resultado: vResultado, guia: vGuia, terminar: vTerminar, historial: vHistorial, detalle: vDetalle };
+
+function render() {
+  screen.innerHTML = VISTAS[S.vista]();
+  document.querySelectorAll("nav.bottom button").forEach(b => b.classList.toggle("on", b.dataset.go === S.vista || (S.vista === "detalle" && b.dataset.go === "historial")));
+  const f = $("#file");
+  if (f) f.addEventListener("change", e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    S.texto = ($("#texto") || {}).value || S.texto;
+    S.foto = URL.createObjectURL(file);
+    render();
+  });
+}
+
+/* ---------- Eventos ---------- */
+document.addEventListener("click", e => {
+  const g = e.target.closest("[data-go]");
+  if (g) {
+    const v = g.dataset.go;
+    if (v === "nuevo") { S.caso = null; S.foto = null; S.texto = ""; S.hecho = {}; }
+    return go(v);
+  }
+  const a = e.target.closest("[data-act]");
+  if (!a) return;
+  const act = a.dataset.act;
+  if (act === "exp") { S.exp = a.dataset.k; render(); }
+  if (act === "caso") { S.texto = ($("#texto") || {}).value || S.texto; S.caso = a.dataset.k; render(); }
+  if (act === "analizar" && S.caso) { go("analizando"); setTimeout(() => go("resultado"), 1800); }
+  if (act === "terminar") go("terminar");
+  if (act === "guardar") {
+    const pasos = CASOS[S.caso].pasos.map((_, i) => !!S.hecho[i]);
+    S.historial.push({ id: Date.now(), caso: S.caso, fecha: "hoy", estado: a.dataset.e, pasos, nota: "" });
+    S.hecho = {};
+    go("historial");
+  }
+  if (act === "verHist") go("detalle", { sel: Number(a.dataset.id) });
+  if (act === "copiar") {
+    const t = $("#resumen").textContent;
+    const ok = () => { $("#msg").textContent = "Resumen copiado."; };
+    try { navigator.clipboard.writeText(t).then(ok, ok); } catch (_) { ok(); }
+  }
+});
+document.addEventListener("change", e => {
+  const h = e.target.closest('[data-act="hecho"]');
+  if (h) { S.hecho[Number(h.dataset.i)] = h.checked; render(); }
+});
+
+render();
+</script>
+</body>
+</html>
